@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
 
 namespace SharpCms.Core.Controllers
 {
@@ -8,7 +8,7 @@ namespace SharpCms.Core.Controllers
         //
         // GET: /Sites/
 
-        public ActionResult Index()
+        public IActionResult Index()
         {
             var items = new List<Site>
                 {

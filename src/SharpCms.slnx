@@ -1,0 +1,10 @@
+<Solution>
+  <Project Path="SharpCms.Core/SharpCms.Core.csproj" />
+  <Project Path="SharpCms.Data.Azure.Blob/SharpCms.Data.Azure.Blob.csproj" />
+  <Project Path="SharpCms.Data.Azure.Sql/SharpCms.Data.Azure.Sql.csproj" />
+  <Project Path="SharpCms.Data.Azure.Table/SharpCms.Data.Azure.Table.csproj" />
+  <Project Path="SharpCms.Data.FileSystem/SharpCms.Data.FileSystem.csproj" />
+  <Project Path="SharpCms.Mvc/SharpCms.Mvc.csproj" />
+  <Project Path="SharpCmsWeb.Tests/SharpCmsWeb.Tests.csproj" />
+  <Project Path="SharpCmsWeb/SharpCmsWeb.csproj" />
+</Solution>

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
 
 namespace SharpCms.Core.Controllers
 {
@@ -9,12 +9,12 @@ namespace SharpCms.Core.Controllers
         //
         // GET: /Mandator/
 
-        public ActionResult Index()
+        public IActionResult Index()
         {
             return View();
         }
 
-        public ActionResult Navigation()
+        public IActionResult Navigation()
         {
             var model = new List<NavigationItem>
                 {
@@ -30,7 +30,7 @@ namespace SharpCms.Core.Controllers
             return View(model);
         }
 
-        public ActionResult DashBoard()
+        public IActionResult DashBoard()
         {
             return View();
         }

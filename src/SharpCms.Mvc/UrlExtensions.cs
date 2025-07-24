@@ -1,25 +1,39 @@
-﻿using System.Web.Mvc;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace SharpCms.Mvc
 {
     public static class UrlExtensions
     {
-        public static string ActionUrl(this HtmlHelper helper, string action, string controller, object routeValues)
+        public static string ActionUrl(this IHtmlHelper helper, string action, string controller, object? routeValues = null)
         {
-            var urlHelper = new UrlHelper(helper.ViewContext.RequestContext);
-            return urlHelper.Action(action, controller, routeValues); //  RouteUrl
+            var urlHelper = helper.ViewContext.HttpContext.RequestServices.GetRequiredService<Microsoft.AspNetCore.Mvc.IUrlHelper>();
+            return urlHelper.Action(new UrlActionContext
+            {
+                Action = action,
+                Controller = controller,
+                Values = routeValues
+            }) ?? string.Empty;
         }
 
-        public static string ActionUrl(this HtmlHelper helper, string action, string controller)
+        public static string ActionUrl(this IHtmlHelper helper, string action, string controller)
         {
-            var urlHelper = new UrlHelper(helper.ViewContext.RequestContext);
-            return urlHelper.Action(action, controller); //  RouteUrl
+            var urlHelper = helper.ViewContext.HttpContext.RequestServices.GetRequiredService<Microsoft.AspNetCore.Mvc.IUrlHelper>();
+            return urlHelper.Action(new UrlActionContext
+            {
+                Action = action,
+                Controller = controller
+            }) ?? string.Empty;
         }
 
-        public static string ActionUrl(this HtmlHelper helper, string action)
+        public static string ActionUrl(this IHtmlHelper helper, string action)
         {
-            var urlHelper = new UrlHelper(helper.ViewContext.RequestContext);
-            return urlHelper.Action(action);
+            var urlHelper = helper.ViewContext.HttpContext.RequestServices.GetRequiredService<Microsoft.AspNetCore.Mvc.IUrlHelper>();
+            return urlHelper.Action(new UrlActionContext
+            {
+                Action = action
+            }) ?? string.Empty;
         }
     }
 }

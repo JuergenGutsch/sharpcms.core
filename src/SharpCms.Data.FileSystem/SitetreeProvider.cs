@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
-using System.Web;
 using System.Xml.Linq;
+using Microsoft.AspNetCore.Hosting;
 using SharpCms.Core;
 using SharpCms.Core.Contracts.Data;
 using SharpCms.Core.DataObjects;
@@ -10,18 +10,18 @@ namespace SharpCms.Data.FileSystem
 {
     public class SitetreeProvider : ISitetreeProvider
     {
-        private readonly HttpContextBase _server;
+        private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly string _connectionString;
 
-        public SitetreeProvider(HttpContextBase server, string connectionString)
+        public SitetreeProvider(IWebHostEnvironment webHostEnvironment, string connectionString)
         {
-            _server = server;
+            _webHostEnvironment = webHostEnvironment;
             _connectionString = connectionString;
         }
 
-        private HttpServerUtilityBase Server
+        private string MapPath(string virtualPath)
         {
-            get { return _server.Server; }
+            return Path.Combine(_webHostEnvironment.ContentRootPath, virtualPath.TrimStart('~', '/').Replace('/', Path.DirectorySeparatorChar));
         }
 
         public PageInfo GetSiteTree()
@@ -35,14 +35,16 @@ namespace SharpCms.Data.FileSystem
                     PageName = "root",
                 };
 
-            var path = Server.MapPath(Path.Combine(_connectionString, "tree.xml"));
+            var path = MapPath(Path.Combine(_connectionString, "tree.xml"));
             using (var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read))
             {
                 var document = XDocument.Load(fileStream);
                 var tree = document.Element("tree");
 
-                AddSubPages(siteTree, tree);
-
+                if (tree != null)
+                {
+                    AddSubPages(siteTree, tree);
+                }
             }
 
             return siteTree;

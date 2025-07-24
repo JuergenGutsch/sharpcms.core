@@ -1,4 +1,4 @@
-﻿using System.Web.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace SharpCms.Core.Controllers
 {
@@ -7,7 +7,7 @@ namespace SharpCms.Core.Controllers
         //
         // GET: /Shell/
 
-        public ActionResult Index()
+        public IActionResult Index()
         {
             return View();
         }

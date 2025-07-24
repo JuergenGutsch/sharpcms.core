@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Web;
 using System.Xml.Linq;
+using Microsoft.AspNetCore.Hosting;
 using SharpCms.Core.Contracts.Data;
 using SharpCms.Core.DataObjects;
 
@@ -11,38 +11,42 @@ namespace SharpCms.Data.FileSystem
 {
     public class PageProvider : IPageProvider
     {
-        private readonly HttpContextBase _server;
+        private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly string _connectionString;
 
-        public PageProvider(HttpContextBase server, string connectionString)
+        public PageProvider(IWebHostEnvironment webHostEnvironment, string connectionString)
         {
-            _server = server;
+            _webHostEnvironment = webHostEnvironment;
             _connectionString = connectionString;
         }
 
-        private HttpServerUtilityBase Server
+        private string MapPath(string virtualPath)
         {
-            get { return _server.Server; }
+            return Path.Combine(_webHostEnvironment.ContentRootPath, virtualPath.TrimStart('~', '/').Replace('/', Path.DirectorySeparatorChar));
         }
 
         public ICollection<Container> GetCurrentPageContainers(PageInfo currentpage)
         {
             var pagefile = String.Format("{0}.xml", currentpage.PageIdentifier);
-            var path = Server.MapPath(Path.Combine(_connectionString, pagefile));
+            var path = MapPath(Path.Combine(_connectionString, pagefile));
 
             var result = new Collection<Container>();
             using (var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read))
             {
                 var document = XDocument.Load(fileStream);
 
-                var tree = document.Element("page").Elements("containers");
+                var tree = document.Element("page")?.Elements("containers");
+                if (tree == null) return result;
 
                 foreach (var xcontainer in tree.Elements("container"))
                 {
+                    var nameAttribute = xcontainer.Attribute("name");
+                    if (nameAttribute == null) continue;
+
                     var container = new Container
                         {
                             Id = Guid.NewGuid(),
-                            Name = xcontainer.Attribute("name").Value
+                            Name = nameAttribute.Value
                         };
 
                     AddElements(container, xcontainer);
@@ -56,12 +60,18 @@ namespace SharpCms.Data.FileSystem
 
         private void AddElements(Container container, XElement xcontainer)
         {
-            foreach (var xelement in xcontainer.Element("elements").Elements("element"))
+            var elementsContainer = xcontainer.Element("elements");
+            if (elementsContainer == null) return;
+
+            foreach (var xelement in elementsContainer.Elements("element"))
             {
+                var typeAttribute = xelement.Attribute("type");
+                if (typeAttribute == null) continue;
+
                 var element = new Element
                     {
                         Id = Guid.NewGuid(),
-                        ElementTypeName = xelement.Attribute("type").Value,
+                        ElementTypeName = typeAttribute.Value,
                         Published = true
                     };
 

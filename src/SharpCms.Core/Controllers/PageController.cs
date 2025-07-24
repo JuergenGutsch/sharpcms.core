@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using SharpCms.Core.Contracts.Data;
 using SharpCms.Core.DataObjects;
 
@@ -17,7 +17,7 @@ namespace SharpCms.Core.Controllers
             _pageProvider = pageProvider;
         }
 
-        public ActionResult PageView(string page1, string page2, string page3, string page4, string page5)
+        public IActionResult PageView(string page1, string page2, string page3, string page4, string page5)
         {
             var path = new[] { page1, page2, page3, page4, page5 };
 

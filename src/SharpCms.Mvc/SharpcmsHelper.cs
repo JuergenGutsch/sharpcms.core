@@ -2,23 +2,26 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using SharpCms.Core.DataObjects;
 
 namespace SharpCms.Mvc
 {
     public class SharpcmsHelper
     {
-        private readonly HtmlHelper _htmlhelper;
+        private readonly IHtmlHelper _htmlhelper;
 
-        public SharpcmsHelper(HtmlHelper htmlhelper)
+        public SharpcmsHelper(IHtmlHelper htmlhelper)
         {
             _htmlhelper = htmlhelper;
         }
 
         public ICollection<Element> GetElementsForContainer(Func<Container, bool> expression)
         {
-            var model = (PageModel)_htmlhelper.ViewContext.Controller.ViewData.Model;
+            var model = _htmlhelper.ViewData.Model as PageModel;
+            if (model?.Page?.Containers == null)
+                return new Collection<Element>();
+
             var container = model.Page.Containers.Where(expression).FirstOrDefault();
 
             if (container != null)
@@ -28,16 +31,16 @@ namespace SharpCms.Mvc
             return new Collection<Element>();
         }
 
-        public PageInfo GetCurrentPage()
+        public PageInfo? GetCurrentPage()
         {
-            var model = (PageModel)_htmlhelper.ViewContext.Controller.ViewData.Model;
-            return model.Page.PageInfo;
+            var model = _htmlhelper.ViewData.Model as PageModel;
+            return model?.Page?.PageInfo;
         }
         
         public ICollection<PageInfo> GetSubPages()
         {
-            var model = (PageModel)_htmlhelper.ViewContext.Controller.ViewData.Model;
-            return model.Page.PageInfo.Children;
+            var model = _htmlhelper.ViewData.Model as PageModel;
+            return model?.Page?.PageInfo?.Children ?? new Collection<PageInfo>();
         }
 
     }

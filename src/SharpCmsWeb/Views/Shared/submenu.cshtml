@@ -17,7 +17,7 @@
                     @{
                 var classname = page.InPath ? "sel" : string.Empty;
                     }
-                    <a href="@path" class="@classname" ><span>@page.Menuname</span>
+                    <a href="@path" class="@classname" ><span>@(page.Menuname)</span>
                         <span class="hide">| </span></a>
                 </li>
             }

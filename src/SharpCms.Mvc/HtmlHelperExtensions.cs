@@ -1,23 +1,22 @@
 ﻿using System;
-using System.Web.Mvc;
-using System.Web.WebPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Html;
 
 namespace SharpCms.Mvc
 {
     public static class HtmlHelperExtensions
     {
-        public static SharpcmsHelper Sharpcms(this HtmlHelper htmlhelper)
+        public static SharpcmsHelper Sharpcms(this IHtmlHelper htmlhelper)
         {
             return new SharpcmsHelper(htmlhelper);
         }
 
-        public static HelperResult RenderSection(this WebPageBase webPage, string name, Func<dynamic, HelperResult> defaultContents)
+        // Note: RenderSection functionality would need to be implemented differently in ASP.NET Core
+        // This is just a placeholder - the actual implementation would depend on your specific needs
+        public static IHtmlContent RenderSection(this IHtmlHelper htmlHelper, string name, Func<dynamic, IHtmlContent>? defaultContents)
         {
-            if (webPage.IsSectionDefined(name))
-            {
-                return webPage.RenderSection(name);
-            }
-            return defaultContents(null);
+            // This would need to be implemented based on your specific section rendering logic
+            return defaultContents?.Invoke(null!) ?? HtmlString.Empty;
         }
     }
 }

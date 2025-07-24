@@ -10,9 +10,9 @@
         @foreach (var page in pages)
         {
             <li>
-                <a href="/@page.PageIdentifier">
-                    @page.PageName<br />
-                    @page.Description
+                <a href="/@(page.PageIdentifier)">
+                    @(page.PageName)<br />
+                    @(page.Description)
                 </a>
             </li>
         }

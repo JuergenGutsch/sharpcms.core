@@ -1,7 +1,7 @@
 ﻿@model SharpCms.Core.DataObjects.Element
 
 @{
-    var headerstyle = Model.Parameters(x => x.Name.Equals("headerstyle")).Value.ToString();
+    var headerstyle = Model.Parameters.FirstOrDefault(x => x.Name.Equals("headerstyle"))?.Value?.ToString() ?? "";
     var tagname = "h1";
 
     switch (headerstyle)
@@ -19,5 +19,5 @@
 }
 
 <@tagname>
-@Model.Parameters(x => x.Name.Equals("text")).Value
+@(Model.Parameters.FirstOrDefault(x => x.Name.Equals("text"))?.Value ?? "")
 </@tagname>
