@@ -1,0 +1,44 @@
+﻿@using SharpCms.Core
+
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Index";
+}
+<h1>Website Overview</h1>
+<table>
+    <thead>
+        <tr>
+            <th>Webite</th>
+            <th>Default Domain</th>
+            <th>Aktive</th>
+            <th>Languages</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>gutsch-online.de</td>
+            <td>www.gutsch-online.de</td>
+            <td>
+                <input type="checkbox" checked disabled /></td>
+            <td>DE, EN</td>
+            <td><a href="#">settings</a> <a href="#">edit contents</a></td>
+        </tr>
+        <tr>
+            <td>sharpcms.org</td>
+            <td>sharpcms.org</td>
+            <td>
+                <input type="checkbox" checked disabled /></td>
+            <td>DE, EN</td>
+            <td><a href="#">settings</a> <a href="#">edit contents</a></td>
+        </tr>
+        <tr>
+            <td>lizzy.net</td>
+            <td>www.lizzy.net</td>
+            <td>
+                <input type="checkbox" disabled /></td>
+            <td>DE, EN, IT, FR, SP</td>
+            <td><a href="#">settings</a> <a href="#">edit contents</a></td>
+        </tr>
+    </tbody>
+</table>

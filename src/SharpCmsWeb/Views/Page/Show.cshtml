@@ -1,0 +1,23 @@
+﻿@using SharpCms.Core
+@using SharpCms.Mvc
+@model SharpCms.Core.DataObjects.PageModel
+
+@{
+    ViewBag.Title = Model.Page.PageInfo.PageName;
+    ViewBag.Description = Model.Page.PageInfo.Description;
+    ViewBag.KeyWords = Model.Page.PageInfo.Tags.Join(",");
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@foreach (var element in Html.Sharpcms().GetElementsForContainer(x => x.Name.Equals("content")))
+{
+    Html.RenderPartial(element.ElementTypeName, element);
+}
+
+
+@section News {
+    @foreach (var element in Html.Sharpcms().GetElementsForContainer(x => x.Name.Equals("news")))
+    {
+        Html.RenderPartial(element.ElementTypeName, element);
+    }
+}
